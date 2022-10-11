@@ -44,9 +44,19 @@ Consider a triangle $\Delta$ of $H^{\triangleleft}$, viewing $\Delta$ as the ext
 
 Let $\Delta$ be an arbitrary triangle. If the fundamental cycle of one of the boundary edges - say $(u,v)$ - has more than half the weight strictly inside we consider $\Delta'$ on the other side of $(u,v)$. Keep doing this, observing that it terminates because turning the cycle 'inside out' means that the new triangle $\Delta'$ has at most half the weight. If, however, the third corner of $\Delta'$ is $w'$ then the new insides of the fundamental cycles of $(u,w'), (v,w')$ are both contained in the previous 'inside face' of $(u,v)$ without $\Delta'$. So both have fewer triangles than previous inside of $(u,v)$.
 
-<img width="492" alt="Screenshot 2022-10-11 at 14 15 05" src="https://user-images.githubusercontent.com/69584282/195168431-4aee8f08-359c-4634-9d79-7da897793867.png">
+<img width="514" alt="Screenshot 2022-10-11 at 14 20 02" src="https://user-images.githubusercontent.com/69584282/195169345-dbac7dbf-bc42-4c86-9798-46f6e652286c.png">
+
 
 In Lipton, Tarjan [1979] the above construction can be implemented in linear time. First we embed, triangulate the graph and pick arbitrary triangle and find the weight inside the fundamental cycle of the boundary edges. Then we have a loop, moving $\Delta$ to neighboring triangle. Each time we find the weight of the new inside face of the fundamental cycle of each boundary edge.
 
 ### Reachability via a Dipath
+Now we showe that we can use separator dipaths to represent directed reachability efficiently. A vertex $u$ reaches $w$ via dipath $Q$ if there is a dipath from $u$ to $w$ intersecting $Q$.
+
+There is a dipath from $u$ to $w$ intersecting $Q$ iff $u$ connects to $a$ in $Q$ and $w$ connects from $b$ in $Q$ where $a$ equals of precedes $b$ in $Q$. (Assuming numbered vertices in $Q$ for checking precedence in constant time. 
+
+<img width="492" alt="Screenshot 2022-10-11 at 14 15 05" src="https://user-images.githubusercontent.com/69584282/195168431-4aee8f08-359c-4634-9d79-7da897793867.png">
+
+*Lemma 2.5.* For any digraph $H$ and dipath $Q$ we identify all connections between vertices in $H$ and dipath $Q$ in linear time.
+
+*Proof.* We only need to identify connections from $Q$, which we do by recursion. Let $t$ be the last vertex in $Q$. Then using a BFS, we can find all vertices in $v$ reached by $t$. By definition each of these vertices connect from $t$ from $Q$. Now we remove all of these vertices (including $t$) from $H$ and $Q$, and recur on the remaining vertices. Observe that each edge is considered once so this is linear. Observe that if $t$ reaches a vertex $x \in Q$, $t$ reaches all the successors of $x \in Q$ so it is a 'suffix' (ending part) of $Q$ that we remove. So Q remains a dipath. If $P$ was a dipath from a vertex in $Q$ to a vertex $v$ and a vertex from $P$ is removed then observe that $t$ must reach $v$.
 
