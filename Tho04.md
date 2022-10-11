@@ -28,4 +28,11 @@ Each digraph $G_i$ consists of two consecutive layers with all preceding layers 
 
 By construction, $G_i$ must satisfy 4., and since the layering partitions a vertex such that each vertex can appear as a non-root node at most twice, 1. is satisfied since we have at most $2n+k=O(n)$ vertices, and at most $2n$ edges incident to the roots with each edge occurring at most twice, giving $2n+2m=O(m)$ edges.
 
-Consider a dipath $P$ from $v$ to $w$. Let $i$ be the lowest index of layer intersected by $P$ and let $x$ be a vertex in the intersection. By definition, if $j \geq i$ is even then $L_{\leq i}$ constains the part of path $P$ after vertex $x$ (all vertices reachable by a vertex in previous layer). If $j \geq i$ is odd, then $L_{\leq i}$ contains the part of $P$ before $x$ (all vertices that reach the layers before it).
+Observe that 2. is satisfied. Consider a dipath $P$ from $v$ to $w$. Let $i$ be the lowest index of layer intersected by $P$ and let $x$ be a vertex in the intersection. By definition, if $j \geq i$ is even then $L_{\leq i}$ constains the part of path $P$ after vertex $x$ (all vertices reachable by a vertex in previous layer). If $j \geq i$ is odd, then $L_{\leq i}$ contains the part of $P$ before $x$ (all vertices that reach the layers before it). So $P$ is contained in $L_i \cup L_{i+1}$, so $P$ is in $G_i$. Since we know $v \in P$ is contained in $G_{i(v)-1}$ and $G_{i(v)}$ so $P$ from $v$ to $w$ must be in one of those two digraphs.
+
+Construct the undirected spanning trees $T_i$ and suppose $i$ odd. By definition then $r_i$ reaches all of $L_i$ so a spanning tree $U_i$ of $\{r_i\} \cup L_i$ can be constructed with edges oriented away from $r_i$. $\{r_i\} \cup L_i$ is reached by $L_{i+1}$ so we can extend $U_i$ into a spanning tree of $\{r_i} \cup L_i \cup L_{i+1} = V(G_i)$ but with edges oriented towards $\{r_i\} \cup L_i$. Any path in $T_i$ from $r_i$ now has a first part oriented from $r_i$ and second part oriented towards $r_i$ so 3. is satisfied. The case where $i$ even is similar, but flipping the part orientations.
+
+Applying Lemma 2.2 to a planar digraph for reachability, then we can assume we are dealing with a 2-layered planar digraph. We make reachability oracles for each $G_i$ and address reachability queries from $v$ in $G$ to $G_{i(v)-1}$ and $G_{i(v)}$.
+
+### Undirected Planar Spanning Tree Separation
+
