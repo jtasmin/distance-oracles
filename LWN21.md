@@ -30,3 +30,5 @@ An r-division can be computed in linear time (KMS13).
 An assignment $\mathcal{A}$ associated with a weak net $N$ is a family of subsets of $K$ such that for each $x \in N$ there exists a set $\mathcal{A}[x] \subseteq K$ that contains $x$ and $d_G(x,y) \leq \gamma r$ for each $y \in \mathcal{A}[x]$. An assignment $\mathcal{A}$ covers K if $\bigcup_{A \in \mathcal{A}} = K$.
 
 **Lowest common ancestor (LCA).** Given a tree $T$, an LCA data structure returns the lowest common ancestor of two vertices $u,v \in T$ and this data structure can be constructed in linear time with $O(|V(T)|)$ space, $O(1)$ query time.
+
+# Approximate Distance Oracle with Constant Stretch
