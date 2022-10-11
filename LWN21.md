@@ -32,3 +32,4 @@ An assignment $\mathcal{A}$ associated with a weak net $N$ is a family of subset
 **Lowest common ancestor (LCA).** Given a tree $T$, an LCA data structure returns the lowest common ancestor of two vertices $u,v \in T$ and this data structure can be constructed in linear time with $O(|V(T)|)$ space, $O(1)$ query time.
 
 # Approximate Distance Oracle with Constant Stretch
+### Optimal 8-approximate distance oracle with $O(n \log^3 n) construction time.
