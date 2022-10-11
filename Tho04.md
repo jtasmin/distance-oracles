@@ -44,4 +44,9 @@ Consider a triangle $\Delta$ of $H^{\triangleleft}$, viewing $\Delta$ as the ext
 
 Let $\Delta$ be an arbitrary triangle. If the fundamental cycle of one of the boundary edges - say $(u,v)$ - has more than half the weight strictly inside we consider $\Delta'$ on the other side of $(u,v)$. Keep doing this, observing that it terminates because turning the cycle 'inside out' means that the new triangle $\Delta'$ has at most half the weight. If, however, the third corner of $\Delta'$ is $w'$ then the new insides of the fundamental cycles of $(u,w'), (v,w')$ are both contained in the previous 'inside face' of $(u,v)$ without $\Delta'$. So both have fewer triangles than previous inside of $(u,v)$.
 
+<img width="492" alt="Screenshot 2022-10-11 at 14 15 05" src="https://user-images.githubusercontent.com/69584282/195168431-4aee8f08-359c-4634-9d79-7da897793867.png">
+
+In Lipton, Tarjan [1979] the above construction can be implemented in linear time. First we embed, triangulate the graph and pick arbitrary triangle and find the weight inside the fundamental cycle of the boundary edges. Then we have a loop, moving $\Delta$ to neighboring triangle. Each time we find the weight of the new inside face of the fundamental cycle of each boundary edge.
+
+### Reachability via a Dipath
 
