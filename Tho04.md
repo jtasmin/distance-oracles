@@ -35,4 +35,13 @@ Construct the undirected spanning trees $T_i$ and suppose $i$ odd. By definition
 Applying Lemma 2.2 to a planar digraph for reachability, then we can assume we are dealing with a 2-layered planar digraph. We make reachability oracles for each $G_i$ and address reachability queries from $v$ in $G$ to $G_{i(v)-1}$ and $G_{i(v)}$.
 
 ### Undirected Planar Spanning Tree Separation
+We take a planar digraph $H$ ith a 2-layered spanning tree $T$ without edge orientations, viewing it as an undirected graph with given rooted spanning tree $T$. We will find three root paths in $T$ whose removal separates $H$ into components at most half its size using planarity. Each of these paths correspond to at most six dipaths in the original digraph.
+
+*Lemma 2.3.* Given an undirected planar graph $H$ with rooted spanning tree T and non-negative vertex weights, we can find vertices $u, v, w$ such that each component of $H - V(T(u) \cup T(v) \cup T(w))$ contains at most half the weight of $H$.
+*Proof.* By Lipton, Tarjan [1979] but instead we use 1/2 the weight and not 2/3 the weight in each component. First we embed the graph on a sphere and triangulate $H$ by adding edges. Then $T$ is a spanning tree also for $H^{\triangleleft}$ with any separator of $H^{\triangleleft}$ is also a separator of $H$.
+
+Consider a triangle $\Delta$ of $H^{\triangleleft}$, viewing $\Delta$ as the external face. A fundamental cycle of an edge in $T$ is the cycle consisting of the edge and the unique path between its endpoints in $T$, and the *inside* of this cycle is the side that does not contain $\Delta$. If $(v,w) \in T$ then the inside is empty. If $u,v,w$ are corners of $\Delta$ then each component of $H^{\triangleleft} - V(T(u) \cup T(v) \cup T(w))$ is contained in the fundamental cycle of one of the boundary edges (that is, $(u,v), (v,w), (w,u)$). We want to identify $\Delta$ as an external face so none of the fundamental cycles of the boundary edges of $\Delta$ have more than half its weight strictly inside (excluding vertex weights on the fundamental cycle).
+
+Let $\Delta$ be an arbitrary triangle. If the fundamental cycle of one of the boundary edges - say $(u,v)$ - has more than half the weight strictly inside we consider $\Delta'$ on the other side of $(u,v)$. Keep doing this, observing that it terminates because turning the cycle 'inside out' means that the new triangle $\Delta'$ has at most half the weight. If, however, the third corner of $\Delta'$ is $w'$ then the new insides of the fundamental cycles of $(u,w'), (v,w')$ are both contained in the previous 'inside face' of $(u,v)$ without $\Delta'$. So both have fewer triangles than previous inside of $(u,v)$.
+
 
