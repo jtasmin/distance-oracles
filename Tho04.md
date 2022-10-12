@@ -60,7 +60,27 @@ There is a dipath from $u$ to $w$ intersecting $Q$ iff $u$ connects to $a$ in $Q
 
 *Proof.* We only need to identify connections from $Q$, which we do by recursion. Let $t$ be the last vertex in $Q$. Then using a BFS, we can find all vertices in $v$ reached by $t$. By definition each of these vertices connect from $t$ from $Q$. Now we remove all of these vertices (including $t$) from $H$ and $Q$, and recur on the remaining vertices. Observe that each edge is considered once so this is linear. Observe that if $t$ reaches a vertex $x \in Q$, $t$ reaches all the successors of $x \in Q$ so it is a 'suffix' (ending part) of $Q$ that we remove. So Q remains a dipath. If $P$ was a dipath from a vertex in $Q$ to a vertex $v$ and a vertex from $P$ is removed then observe that $t$ must reach $v$.
 
-### Algorithm for $O(\log{n})$ Reachability Oracle
+### Algorithm for $O(\log{n})$-query time Reachability Oracle
 Let $G$ be a planar digraph. By Lemma 2.2 we reduce our problem to 2-layered digraphs. Consider a 2-layered digraph $H$ with a 2-layered rooted spanning tree $T$. Apply Lemma 2.3 to produce a separator $S$ with three root paths corresponding to six separator dipaths in $H$. With unit vertex weights we know each component of $C$ of $H-V(S)$ has at most half the weight of $H$.
 
 For each dipath $Q \in S$ we apply Lemma 2.5 to produce all connections between $H,Q$. For each vertex $v$ we make two arrays: $to_v, from_v$, indexed by the separator dipath, where $to_v[Q]$ is the number of the vertex that $v$ connects to in $Q$ and $from_v[Q]$ is the number of the vertex that $v$ connects from. If $v$ does not reach $Q$ then $to_v[Q] = \infty$ and if $Q$ does not reach $v$ then $from_v[Q] = -1$. Then $u$ reaches $w$ via the separator $S$ iff $to_v[Q] \leq from_v[Q]$ for some dipath $Q \in S$. This takes constant time to check for given $Q$.
+
+S is a connected part of the spanning tree $T$ including the root because it consists of root paths. Then contract $S$ into root vertex $r^S$, giving us a resulting 2-layered digraph $H/S$ with spanning tree $T/S$ rooted at $r^S$. We give $r^S$ zero weight because we are not interested in connections via $r^S$. For each component of $H-V(S)$ we recur on the subgraph $H' := C \cup \{r^S\}$. Because we give $r^S$ zero weight then total weight in $H' \leq 1/2$ total weight in $H$.
+
+Using Lemma 2.3 (finding vertices such that each component of $H-V(T(u) \cup T(v) \cup T(w))$ has at most half weight of $H$) we find a separator $S'$ of $H'$, but we remove $r^S$ from $S', H'$ since it is suppressed when finding connections between vertices in $H'$ and dipaths in $S'$. At the next level of recursion we have components $C'$ of the graph $H-V(S')$ which are at most half the weight of $C$, so we get $O(\log{n})$ recursion calls with total runtime of $O(n \log{n})$.
+
+### Indexing the Separator Dipaths
+Each vertex $v$ takes parts in calls on a path in the recusion tree that goes from the root to where $v$ is selected for a separator $S$, which we call the *final call* of $v$. These numbers, used as indices for $to_v, from_v$ are $O(\log{n})$, which is also the size of these to and from tables for each vertex.
+
+Let the dipaths in each separator of each call have a fixed ordering, which the enumeration by vertices participating in the call respects. Let $Q$ be a separator dipath in a call with $u$ and $w$, then $u$ and $w$ will use the same index for $Q$. To check reachability from $u \rightarrow w$ we only need to consider calls involving both vertices. **If the number of separator dipaths in calls like these are $s$, then $u$ reaches $w$ iff for some $q \in \{1,...,s\}$, $to_u[q] \leq from_w[q]$.** This check take $O(\log{n})$ time since $s = O(\log{n})$.
+
+To find $s$ we store a separation number with each call $C$. The separation number is the number of separator dipaths in ancestor calls of (and including) $C$. So $s$ is the separation number of the nearest common ancestor call of the finall calls of $u, w$. Finding this nearest common ancestor is $O(\log{n})$ because our recursion tree is logarithmic in depth, so this is our overall query time for reachability.
+
+### Reducing Query Time to $O(1)$
+To achieve constant-time querying, we will pass down a set of root paths $F$ called the frame of $H$, that separate the subgraph $H$ from the rest of $G_i$. (This means $H$ will be a component of $G_i - V(F)$. Let $S$ be a separator of $H$ that separates $u,w$. Then $F \cup S$ separates $u,w$ in $G_i$. 
+
+For each dipath $Q \in F \cup S$ we will identify the connections between $H,Q$ over $G_i$, such that $v \in V(H)$ connects to the first vertex in Q, and connects from the last vertex in Q that $v$ can reach in $G_i$. Since $F,S$ are constant in size we only have a constant number of separator and frame dipaths to query so we can check reachability from $u, w$.
+
+The union of elements of $F$ is a tree of the same root as our rooted spanning tree. Since we want to minimise the number of root paths in $F$ we assume that these are root paths from leaves to tree, since additional root paths would not affect V(F) they are redundant. So we also call the root paths in $F$ the leaves of $F$.
+
+### Few-frame Paths
