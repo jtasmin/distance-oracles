@@ -106,3 +106,44 @@ Overall processing time is still linear in the size of $H \star F$ so overall ru
 
 ### Indexing with Frames
 When enumerating dipaths from a vertex $v$, we want to enumerate both the dipaths in the frame and those in the separator in each ancestor call of the final call of $v$. In this case, the same dipath often gets numbered several time first as a separator and later as a frame. Let the separation number of a call be the last number used for enumerating dipaths for that call. Let $C$ be the nearest common ancestor of the final calls of $u,w$, and $s$ be the separation number of $C$. Let $p$ be the separation number of the parent of $C$ such that $\{p+1,...,s\}$ are the indices of this frame and the separator dipaths of $C$ so $u$ reaches $w$ in $G_i$ iff there exists a $q \in \{p+1,...,s\}$ such that $to_u[q] \leq from_w [q]$.
+
+If we apply the linear-time preprocessing algorithm by Harel and Tarjan [1984] to the recursion tree, we can get the nearest common ancestor call $C$ in constant time, which also gives us the separation numbers $s,p$ of $C$ and its parents. From this, then we conclude:
+
+**Theorem 2.6.** We can preprocess a planar digraph in $O(n \log{n})$ time and space to produce an $O(n \log{n})$-space reachability oracle that can determine if $u$ reaches $v$ in constant time.
+
+## A Pure Label-Based Implementation
+Now we show that the reachability oracle can be distributed as a labeling scheme by associating each vertex $v$ with a label $l(v)$ of size $O(\log{n})$ so that only when given $l(u), l(w)$ we can detemine if u reaches w.
+
+We have $O(\log{n})$-space tables $from_v$ and $to_v$. The separation numbers are stored globally with calls in the recursion tree but instead for each vertex $v$ and depth $d$ we store the separation number $s_v[d]$ of the depth d ancestor of the final call of $v$ in the recursion tree. So all we have to do is now find a labeling for depths of nearest common ancestors. To get constant query time, we translate Harel, Tarjan's technique into a labeling scheme: observe that whenever global information is accessed it is associated with an ancestor tree of $O(\log{n})$ height, and if we copy this information down to each descendant we get the desired label of $O(\log{n})$ space. This increases our nearest-common ancestors space to $O(n \log{n})$ which is equal to the global space.
+
+**Theorem 2.7.** The oracle of Theorem 2.6 can be distributed as a labeling scheme with labels of size $O(\log{n})$.
+
+### Finding Dipaths
+If we find that $u$ reaches $w$, next we want to produce a dipath from $u$ to $w$ in time linear to path length.
+#### Pathfinding in the Basic Recursion
+If $u$ reaches $w$ then our query algorithm finds an index $q$ of a separator dipath $Q$ of a digraph $H$ such that:
+1. the connection via $H$ from $u$ to $Q$ precedes the connection via $H$ from $Q$ to $w$
+2. all dipaths from $u$ to $w$ in $H$ are also dipaths in the original digraph $G$.
+
+Extending Lemma 2.5, we provide dipaths that witness the connections between $H$ and $Q$. In Lemma 2.5, the proof finds a forest of disjoint $from$-trees oriented away from roots in $Q$ such that $a$ is the root of $v$ if and only if $(a,v)$ is the connection from $Q$ to $v$. Symmetrically, we can witness connections from $H$ to $Q$ and get a forest of $to$-trees oriented towards roots in $Q$.
+
+We save the parent pointers of the $to$ and $from$ trees using $q$ as an index. We let $to_v[q]$ store the parent of the $v$ in the to-trees generated from $Q$, and if $v$ is a root then this is nil and if $v$ does not reach $Q$ then it is undefined. Similarly, $from_v[q]$ stores the parent of $v$ in the from-trees generated from $Q$. These parent pointers don't affect our asymptotic space bounds.
+
+Given the index $q$, with $to_u[q] \leq from_w[q]$ we follow parent points by tracing a dipath from $u$ to $a \in Q$ and follow the parent pointers $from_v[q]$ tracing backwards to get a dipath from $b \in Q$ to $w$ where $b$ equals or succeeds $a \in Q$. If $Q_0$ is a segment of $Q$ from $a$ to $b$ then $P_1Q_0P_2$ is a dipath from $u$ to $w$ that we find in linear time in its length.
+
+We ensure that the dipath can be generated without loops [fill in this section].
+
+### Pathfinding with Constant Query Time
+Witnessing dipaths combined with the constant query time from Section 2.5. The problem is not all dipaths from $u$ to $w$ in $H$ are also dipaths in the original digraph $G$. More precisely, if $u$ reaches $w$, our query algorithm returns an index $q$ of a separator dipath $Q$ of a digraph $H \star F$ from $Q$ to $w$. This means we can find a dipath $P$ in $H \star F$ from $u$ to $v$ via $Q$. However, $H \star F, P$ may contain edges that are not edges in the original digraph. 
+
+The idea is when we recur on $H$ with frame $F$ and separator $S$, besides making global connections over $H \star F$ between $Q \in F \cup S$ and $H$, we make local connections over $H$ between dipaths $Q \in S$ and $H$. These local connections can be turned into dipaths via parent pointers. So if $u$ reaches $w$ in $G_i$, our goal is to compute $sep(u,w)$ denoting an index of a separator dipath $Q$ of an ascending (from a call ascending from the final calls of u,w) digraph $H$ such that there exists a dipath from $u$ to $w$ in $H$ which intersects $Q$. The indexing of separator dipaths for these local connections is exactly the same as the basic recursion, and we compute the separation index based on information stored within the global connections found by our reachability query.
+
+In our recursion we are going to label all edges and global connections with their $sep$-values. When recurring with $H\star F$ we assume that we have labels for all edges $(x,y)$ that are not in H. When we pick a separator $S$ we index the separator dipaths in some order (the one described in 2.4). Then going through the dipaths in this order, and taking all edges incident to (and including) those in $Q$ that have not been labeled and we label them with the index of $Q$. Now we construct the global connections over $H \star F$ between $Q$ and $H$, and these global connections are witnessed by $to$ and $from$ trees in $H \star F$. A global connection $(v,a),a \in Q$ is now labeled with the smallest label on the path from v to its root $a$ in the to-trees. Similarly, $(b,v), b\in Q$ is labeled with the smallest label on the path from $v$ to its root $b$ in the from-trees. Processing the $to$ and $from$ trees top down, we can label the global connections in time linear to the sizes of the trees, resulting in $O(n \log{n})$ total time.
+
+To see that the above labeling of the global connections with the $sep$-values will be correct, consider a dipath $P$ in the to-tree in $H \star F$ witnessing a global connection from $v$ to $a$. Since all edges incident to $Q$ have labels and $P$ contains at least one label and the smallest label is transferred to (v,a). Let $(x,y)$ be an edge in $P$ with smallest label $q_0$. Then this label is the index of a separator dipath $Q_0$ of an ascending digraph $H_0$ with dipath $P_0$ in $H_0$ which intersects $Q_0$. Then $H_0$ contains $H$ so all unlabeled edges in $P$ are in $H_0$. And all labeled edges in $P$ have labels at least as high as $q_0$. However, the higher the index of separator dipath then the younger a digraph it separates, so all other edges in $P$ have their endpoints connected by dipaths in digraphs equal to (or descending) from $H_0$, hence they are contained in $H_0$. Concatenating these edges and dipaths, including the above $P_0$ from $x$ to $y$, we get a dipath from $v$ to $a$ in $H_0$ which intersects $Q_0$ as desired.
+
+Now return to a dipath query: when asking if $u$ reaches $w$ then a positive answer provides the index of a separator dipath $Q$ and global connections $(u,a)$ and $(b,w), a,b \in Q$ with a equal to or preceding b in $Q$. Now we set $sep(u,w) = q_0 = min\{sep(u,a), sep(b,w)\}$. The only surprising thing is that we do not need to consider the sep-values of the edges in the segment of $Q$ between a and b (that is, clearly an ascending digraph $H_0$ with separator dipath $Q_0$ indexed at $q_0$ such that $H_0$ contains dipaths from $u$ to $a$ and from $b$ to $w$, with one of these dipaths intersecting $Q_0$).
+
+We need to argue that $H_0$ contains the segment of $Q$ from $a$ to $b$. Suppose for contradiction that some strict ancestor of $H_0$ had separator path $R$ that intersects this segment of $Q_0$. Since any separator path is a root path, R contains either $a$ or $b$ to $w$ which intersects $Q_0$ as desired.
+
+Storing with each vertex the sep-values of the connections to and from each ascending separator dipath, we can compute the sep value of u,w in constant time, hence returning a simple dipath from u to w in time linear in its length using the method from basic recursion.
