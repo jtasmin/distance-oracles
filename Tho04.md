@@ -3,7 +3,7 @@
 ## Introduction
 Let $G=(V,E)$ be a planar digraph with $n$ vertices. We can preprocess this graph in $O(n \log{n})$ space and time to produce an oracle that answers reachability queries (ie. whether vertex $u$ is reachable from vertex $v$) in constant time.
 
-A stretch-$t$ distance oracle provides distances that are at most $t$-times larger than the true shortest-path distance in $G$.
+A stretch-*t* distance oracle provides distances that are at most $t$-times larger than the true shortest-path distance in $G$.
 
 This reachability oracle distributes into labeling schemes: each vertex gets an assigned label $l(.)$ such that given $l(v), l(w)$, we can compute if $v$ reaches $w$ in constant time. In approximate oracles, we get labels of size $O(\log{nN} \log{n}/\epsilon)$ so that we can compute distances with $(1+\epsilon)$-stretch in $O(\log{\log{nN}}+1/\epsilon)$ time. For undirected graphs, this becomes $O(\log{n}/\epsilon)$ calculation time and $O(1/\epsilon)$ query time.
 
