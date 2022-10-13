@@ -59,7 +59,12 @@ There is a dipath from $u$ to $w$ intersecting $Q$ iff $u$ connects to $a$ in $Q
 
 *Lemma 2.5.* For any digraph $H$ and dipath $Q$ we identify all connections between vertices in $H$ and dipath $Q$ in linear time.
 
-*Proof.* We use recursion to identify connections from $Q$, which is all we need. Use a BFS to find all vertices $v$ reached by the last vertex in $Q$, $t$. Now remove all reached vertices (including $t$) from $H$ and $Q$, and recur on the remaining vertices. Observe that each edge is considered once so this is linear. Observe that if $t$ reaches a vertex $x \in Q$, $t$ reaches all the successors of $x \in Q$ so it is a 'suffix' (ending part) of $Q$ that we remove. So $Q$ remains a dipath. If $P$ was a dipath from a vertex in $Q$ to a vertex $v$ and a vertex from $P$ is removed then observe that $t$ must reach $v$.
+*Proof.* We use recursion to identify connections from $Q$, which is all we need because we can use symmetry for connections from $H$. 
+1. Use a BFS to find all vertices $v$ reached by the last vertex in $Q$, $t$. 
+2. Now remove all reached vertices (including $t$) from $H$ and $Q$
+3. Recur on the remaining vertices. Observe that each edge is considered once so this is linear. 
+
+Observe that if $t$ reaches a vertex $x \in Q$, $t$ reaches all the successors of $x \in Q$ so it is a 'suffix' (ending part) of $Q$ that we remove. So $Q$ remains a dipath. If $P$ was a dipath from a vertex in $Q$ to a vertex $v$ and a vertex from $P$ is removed then observe that $t$ must reach $v$ (by the recursion steps above). So no connections except those from $t$ are destroyed.
 
 ### Algorithm for $O(\log{n})$-query time Reachability Oracle
 Let $G$ be a planar digraph. By Lemma 2.2 we reduce our problem to 2-layered digraphs. Consider a 2-layered digraph $H$ with a 2-layered rooted spanning tree $T$. Apply Lemma 2.3 to produce a separator $S$ with three root paths corresponding to six separator dipaths in $H$. With unit vertex weights we know each component of $C$ of $H-V(S)$ has at most half the weight of $H$.
