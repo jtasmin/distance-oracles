@@ -39,6 +39,7 @@ Applying Lemma 2.2 to a planar digraph for reachability, then we can assume we a
 We take a planar digraph $H$ ith a 2-layered spanning tree $T$ without edge orientations, viewing it as an undirected graph with given rooted spanning tree $T$. We will find three root paths in $T$ whose removal separates $H$ into components at most half its size using planarity. Each of these paths correspond to at most six dipaths in the original digraph.
 
 *Lemma 2.3.* Given an undirected planar graph $H$ with rooted spanning tree T and non-negative vertex weights, we can find vertices $u, v, w$ such that each component of $H - V(T(u) \cup T(v) \cup T(w))$ contains at most half the weight of $H$.
+
 *Proof.* By Lipton, Tarjan [1979] but instead we use 1/2 the weight and not 2/3 the weight in each component. First we embed the graph on a sphere and triangulate $H$ by adding edges. Then $T$ is a spanning tree also for $H^{\triangleleft}$ with any separator of $H^{\triangleleft}$ is also a separator of $H$.
 
 Consider a triangle $\Delta$ of $H^{\triangleleft}$, viewing $\Delta$ as the external face. A fundamental cycle of an edge in $T$ is the cycle consisting of the edge and the unique path between its endpoints in $T$, and the *inside* of this cycle is the side that does not contain $\Delta$. If $(v,w) \in T$ then the inside is empty. If $u,v,w$ are corners of $\Delta$ then each component of $H^{\triangleleft} - V(T(u) \cup T(v) \cup T(w))$ is contained in the fundamental cycle of one of the boundary edges (that is, $(u,v), (v,w), (w,u)$). We want to identify $\Delta$ as an external face so none of the fundamental cycles of the boundary edges of $\Delta$ have more than half its weight strictly inside (excluding vertex weights on the fundamental cycle).
@@ -53,7 +54,7 @@ In Lipton, Tarjan [1979] the above construction can be implemented in linear tim
 ### Reachability via a Dipath
 Now we showe that we can use separator dipaths to represent directed reachability efficiently. A vertex $u$ reaches $w$ via dipath $Q$ if there is a dipath from $u$ to $w$ intersecting $Q$.
 
-There is a dipath from $u$ to $w$ intersecting $Q$ iff $u$ connects to $a$ in $Q$ and $w$ connects from $b$ in $Q$ where $a$ equals of precedes $b$ in $Q$. (Assuming numbered vertices in $Q$ for checking precedence in constant time. 
+There is a dipath from $u$ to $w$ intersecting $Q$ iff $u$ connects to $a$ in $Q$ and $w$ connects from $b$ in $Q$ where $a$ equals or precedes $b$ in $Q$. (Assuming numbered vertices in $Q$ for checking precedence in constant time. 
 
 <img width="492" alt="Screenshot 2022-10-11 at 14 15 05" src="https://user-images.githubusercontent.com/69584282/195168431-4aee8f08-359c-4634-9d79-7da897793867.png">
 
