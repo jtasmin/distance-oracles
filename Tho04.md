@@ -23,7 +23,7 @@ We reduce reachability in G into reachability in some digraphs with special prop
 3. Each $G_i$ is a 2-layered digraph with 2-layered spanning tree $T_i$ with root $r_i$
 4. $G_i$ is a minor of $G$: it is obtained from $G$ by deletion of edges and vertices and contractions of edges. $G_i$ will be planar is $G$ is.
 
-*Proof.* Assume $G$ is connected in the undirected sense, otherwise apply the argument to each connected component independently. We partition $V(G)$ into layers $L_0,...,L_{k-1}$ where $L_0$ is the set of vertices reachable from a vertex $v_0$ and thereafter alternates between vertices reaching or reachable from previous layers. A layer contains all vertices reaching or reachable from previous layers. If $i$ is odd, $L_i$ is all the vertices where $v$ reaches $L_0,...,L_{i-1}$. If $i$ is even, $L_i$ is all the vertices reachable by $L_0,...,L_{i-1}$.
+*Proof.* Assume $G$ is connected in the undirected sense, otherwise apply the argument to each connected component independently. Partition $V(G)$ into layers $L_0,...,L_{k-1}$, where $L_0$ is the set of vertices reachable from a vertex $v_0$ and thereafter alternates between vertices reaching or reachable from previous layers. A layer contains all vertices reaching or reachable from previous layers. If $i$ is odd, $L_i$ is all the vertices where $v$ reaches $L_0,...,L_{i-1}$. If $i$ is even, $L_i$ is all the vertices $v$ reachable by $L_0,...,L_{i-1}$.
 
 Each digraph $G_i$ consists of two consecutive layers with all preceding layers contracted to a single vertex. For $G_0$ we set $r_0=v_0$, and we set all the contracted layers' vertex into $r_i$.
 
