@@ -92,7 +92,7 @@ The union of elements of $F$ is a tree of the same root as our rooted spanning t
 ### Few-frame Paths
 We alternate between subgraph recursion (each of the new subgraphs have few vertices) and frame-reducing recursion (each new subgraph gets a frame with few leaves) to keep the frames constant in size.
 
-Let $H+F$ be all of $H,F$ together with all the edges from $G_i$ between $H$ and $F$. Pick the separator $S =\{T(u) \cup T(v) \cup T(w)\} so that no component of $(H+F)-V(S)$ contains more than half the vertices in $H$. Applying Lemma 2.3, we know that we can find this by putting vertices in $H$ with weight 1, vertices in $F$ with weight 0.
+Let $H+F$ be all of $H,F$ together with all the edges from $G_i$ between $H$ and $F$. Pick the separator $S =\{T(u) \cup T(v) \cup T(w)\}$ so that no component of $(H+F)-V(S)$ contains more than half the vertices in $H$. Applying Lemma 2.3, we know that we can find this by putting vertices in $H$ with weight 1, vertices in $F$ with weight 0.
 
 In frame-reducing recursion we pick $S$ so no component of $(H+F)-V(S)$ contains more than half the leaves of $F$. Applying Lemma 2,3 in this case gives leaves with weight 1 and all other vertices get weight 0. Each of these recursion steps halves the weight of subgraph $H$ so we still only have logarithmic recursion steps.
 
