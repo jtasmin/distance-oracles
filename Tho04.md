@@ -172,3 +172,7 @@ Each digraph $G_i^{\alpha}$ has three consecutive layers, with all preceding lay
 Proof of (i), (iv) are same as Lemma 2.2 and the proof of $(iii') is similar but we use shortest dipaths instead from (and to) $L_0,...,L_j$ to (and from) vertices when $j$ is even (odd). We suppress the root for connections for $i > 0$, which can be implemented by orienting all the edges incident on the root towards (or away from) the root if $i$ is odd (or even).
 
 Observe that (ii') is satisfied. Consider arbitrary dipath $P$ from a vertex $v$ to a vertex $w$ with length at most $\alpha$. Consider innermost layer $L_i$ containing vertex $x$ from $P$. By definition of the layers if $j > i$ is even then $L_0,...,L_j$ contains the part of $P$ after $x$. If $j>i$ is odd then $L_0,...,L_j$ contains the part of $P$ before $x$. Then $P$ must be in $L_i \cup L_{i+1} \cup L_{i+2}$ hence $P$ is contained in $G_i^{\alpha}$. On the other hand since we know that $v \in P$ is only contained in $G_{i(v)-2}^{\alpha}, G_{i(v)-1}^{\alpha}, G_{i(v)}^{\alpha}$ so we conclude that $P$ from $v$ to $w$ is contained in one of these three digraphs.
+
+Given a $(3, \alpha)$-layered digraph with its $(3,\alpha)$-layered rooted spanning tree $T_i^{\alpha}$, we can use this tree to find separators as we did previously, but with each root path being the concatenation of up to 3 shortest dipaths with length of at most $\alpha$.
+
+## Representing Approximate Distances Via a Dipath
