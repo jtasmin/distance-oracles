@@ -176,3 +176,25 @@ Observe that (ii') is satisfied. Consider arbitrary dipath $P$ from a vertex $v$
 Given a $(3, \alpha)$-layered digraph with its $(3,\alpha)$-layered rooted spanning tree $T_i^{\alpha}$, we can use this tree to find separators as we did previously, but with each root path being the concatenation of up to 3 shortest dipaths with length of at most $\alpha$.
 
 ## Representing Approximate Distances Via a Dipath
+Given a digraph $G_i^{\alpha}$ containing a shortest dipath $Q$ from $s$ to $t$ with length at most $\alpha$. We want to represent distances $\leq \alpha$ via $Q$, accepting an additive error of $O(\epsilon \alpha)$ for a given $\epsilon \in (0,1]$.
+
+### Approximation Connections to Q
+Given a vertex $v$ and dipath $Q$, we may need several connections from $v$ to $Q$ to get a good approximation of distances from $v$ to $Q$. More precisely, a connection from $v$ to $Q$ is a new edge $(v,a) \in [v] \times V(Q)$. In this section, lengths = distances but later in efficient construction, some lengths will be longer. 
+
+If $a$ equals or precedes $b$ in $Q$, $v$ is a vertex then we say a connection $(v,a)$ $\epsilon$-covers (v,b) if $l(v,a)+\delta (a,b) \leq \delta(v,b)+\epsilon \alpha$. $Q$ is a shortest path, so $\delta(a,b)$ is the distance from $a$ to $b$ in Q. We say a set $C(v,Q)$ of connections from $v$ to $Q$ is $\epsilon$-covering if it $\epsilon$-covers all pairs in $\{v\} \times V(Q)$ of distance at most $\alpha$. This gives us:
+
+**Fact 3.3** Let $x$ be a vertex in $Q$ of distance at most $\alpha$ from $v$. If $C(v,Q)$ is $\epsilon$-covering there is a connection $(v,a) \in C(v,Q)$ such that $l(v,a)+\delta_Q(a,x) \leq \delta(v,x) + \epsilon \alpha$.
+
+**Lemma 3.4** We want to argue that small $\epsilon$-covering sets exist. There is an $\epsilon$-covering set $C(v,Q)$ with size at most $\lceil 2/\epsilon \rceil$.
+
+*Proof.* Take the first vertex in $Q$ within distance $\alpha$ from $v$, call it $a_0$. Make $(v,a_0)$ the first connection in $C(v,Q)$. Now scan remainining vertices $b$ in $Q$, adding connections only if some $(v,a)$ is the last connection and $(v,b)$ is not $\epsilon$-covered by $(v,a)$, i.e. add $b$ if $l(v,a) + \delta(a,b) > \delta(v,b) + \epsilon \alpha$.
+
+Let $t$ be the last vertex in $Q$. When $(v,a)$ is the last connection added, consider the quantity $l(v,a) + \delta (a,t)$. When adding first connection, the quantity is $l(v,a_0)+\delta(a_0,t) \leq 2\alpha$. When we add $(v,b)$ to C(v,Q) we decrease this quantity by $(l(v,a)+\delta(a,t))-(l(v,b)+\delta(b,t)) = l(v,a)+\delta(a,b)-\delta(v,b) > \epsilon \alpha$. Since this quantity cannot be negative we can bound the number of connections added by $\lceil 2/\epsilon \rceil$. `` revisit
+
+### Approximate Distances via Q
+Connections from $Q$ to $v$ are defined symmetric to the connections from $v$ to $Q$. If $(b,v)$ is a connection and $a$ precedes $b$ in $Q$ then $(b,v)$ $\epsilon$-covers $(a,v) if $\delta(a,b)+l(b,v) \leq \delta(a,v)+\epsilon \alpha$. 
+
+If $(u,a),(b,w)$ are connections from $u$ to $Q$ and from $Q$ to $q$ we define dist($(u,a),(b,w)) = l(u,a)+ \delta_Q(a,b) + l(b,w)$.
+
+To compute $\delta_Q(a,b)$ efficiently we store with each vertex $c \in Q$ its distance $\delta(c,Q)$ from the start of $Q$, as well as its number $i(c,Q)$ in $Q$. Then $a$ equals or precedes $b$ in $Q$ if $i(a,Q) \leq i(b,Q)$ and then $\delta_Q(a,b) = d(b,Q) - d(a,Q)$. (note that we cannot directly compare $d(a,Q), d(b,Q)$ to determine if $a$ equals or precedes $b$ since there may be zero-weight edges in $Q$. If $i(a,Q) > i(b,Q)$ then we have $\delta_Q(a,b) = \infty$. If $C(u,Q), C(Q,w)$ are sets of connections from u to Q and from Q to w, we define dist($C(u,Q),C(Q,w))=min_{(u,a) \in C(v,Q), (b,w) \in C(Q,w)} dist((u,a),(b,w))$.
+
