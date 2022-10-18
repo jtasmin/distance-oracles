@@ -194,7 +194,7 @@ Let $t$ be the last vertex in $Q$. When $(v,a)$ is the last connection added, co
 ### Approximate Distances via Q
 Connections from $Q$ to $v$ are defined symmetric to the connections from $v$ to $Q$. If $(b,v)$ is a connection and $a$ precedes $b$ in $Q$ then $(b,v)$ $\epsilon$-covers $(a,v) if $\delta(a,b)+l(b,v) \leq \delta(a,v)+\epsilon \alpha$. 
 
-If $(u,a),(b,w)$ are connections from $u$ to $Q$ and from $Q$ to $q$ we define dist($(u,a),(b,w)) = l(u,a)+ \delta_Q(a,b) + l(b,w)$.
+If $(u,a),(b,w)$ are connections from $u$ to $Q$ and from $Q$ to $q$ we define $dist((u,a),(b,w)) = l(u,a)+ \delta_Q(a,b) + l(b,w)$.
 
-To compute $\delta_Q(a,b)$ efficiently we store with each vertex $c \in Q$ its distance $\delta(c,Q)$ from the start of $Q$, as well as its number $i(c,Q)$ in $Q$. Then $a$ equals or precedes $b$ in $Q$ if $i(a,Q) \leq i(b,Q)$ and then $\delta_Q(a,b) = d(b,Q) - d(a,Q)$. (note that we cannot directly compare $d(a,Q), d(b,Q)$ to determine if $a$ equals or precedes $b$ since there may be zero-weight edges in $Q$. If $i(a,Q) > i(b,Q)$ then we have $\delta_Q(a,b) = \infty$. If $C(u,Q), C(Q,w)$ are sets of connections from u to Q and from Q to w, we define dist($C(u,Q),C(Q,w))=min_{(u,a) \in C(v,Q), (b,w) \in C(Q,w)} dist((u,a),(b,w))$.
+To compute $\delta_Q(a,b)$ efficiently we store with each vertex $c \in Q$ its distance $\delta(c,Q)$ from the start of $Q$, as well as its number $i(c,Q)$ in $Q$. Then $a$ equals or precedes $b$ in $Q$ if $i(a,Q) \leq i(b,Q)$ and then $\delta_Q(a,b) = d(b,Q) - d(a,Q)$. (note that we cannot directly compare $d(a,Q), d(b,Q)$ to determine if $a$ equals or precedes $b$ since there may be zero-weight edges in $Q$. If $i(a,Q) > i(b,Q)$ then we have $\delta_Q(a,b) = \infty$. If $C(u,Q), C(Q,w)$ are sets of connections from u to Q and from Q to w, we define $dist(C(u,Q),C(Q,w))=min_{(u,a) \in C(v,Q), (b,w) \in C(Q,w)} dist((u,a),(b,w))$.
 
