@@ -153,3 +153,16 @@ Now return to a dipath query: when asking if $u$ reaches $w$ then a positive ans
 We need to argue that $H_0$ contains the segment of $Q$ from $a$ to $b$. Suppose for contradiction that some strict ancestor of $H_0$ had separator path $R$ that intersects this segment of $Q_0$. Since any separator path is a root path, R contains either $a$ or $b$ to $w$ which intersects $Q_0$ as desired.
 
 Storing with each vertex the sep-values of the connections to and from each ascending separator dipath, we can compute the sep value of u,w in constant time, hence returning a simple dipath from u to w in time linear in its length using the method from basic recursion.
+
+# Approximate Distance Oracles
+We will generalise the approach from the previous section for approximate distances.
+
+## $(3, \alpha)$-layered Digraphs
+We define a **$(t,\alpha)$-layered spanning tree** T in a digraph H as a disoriented rooted spanning tree such that a path in T from the root is a concatenation of at most $t$ shortest dipaths in $H$ (each with length at most $\alpha$. We say $H$ is a $(t,\alpha)$-layered digraph if such a spanning tree exists.
+
+**Lemma 3.2. **Given a digraph $G$ and scale $\alpha$, we can construct a series of digraphs satisfying:
+- (i from 2.2) total number of edges and vertices in all the $G_i$ is linear in number of edges and vertices in $G$
+- (iv from 2.2) $G_i$ is a minor of $G$ (made from deletion of edges, vertices and contractions of edges.
+- Each vertex has an index $i(v)$ such that another vertex $w$ is at distance $d \leq \alpha$ from $v \in G$ iff $d$ is the smallest distance from $v$ to $w$ in $G^{\alpha}_{i(v)-2}, G^{\alpha}_{i(v)-1}$
+- Each $G_i^{\alpha} = (V_i,E_i)$ is a $(3,\alpha)$-layered digraph with a $(3,\alpha)$-layered spanning tree denoted $T^{\alpha}_i$ with root denoted $r_i$
+*Proof* Similar construction to Lemma 2.2. First partition vertices of $G$ into layers $L_0,...,L_k$. Let $L_0$ be the set of vertices reachable within a distance $\alpha$ from #v_0$ and for $i > 0$ we define $L_i = \{ v \in V-L_{<i} : \delta(v,L_{<i}) \leq \alpha \}$ if $i$ odd, and if $i$ even we define $L_i = \{ v \in V-L_{<i} : \delta(L_{<i},v) \leq \alpha \}$. Define $\delta(v,L_{<i})$ as the shortest distance from $v$ to a vertex in $L_{<i}$, $\delta(L_{<i},v)$ as the shortest distance from vertex in $L_{<i}$ to $v$.
