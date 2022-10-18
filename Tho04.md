@@ -198,3 +198,18 @@ If $(u,a),(b,w)$ are connections from $u$ to $Q$ and from $Q$ to $q$ we define $
 
 To compute $\delta_Q(a,b)$ efficiently we store with each vertex $c \in Q$ its distance $\delta(c,Q)$ from the start of $Q$, as well as its number $i(c,Q)$ in $Q$. Then $a$ equals or precedes $b$ in $Q$ if $i(a,Q) \leq i(b,Q)$ and then $\delta_Q(a,b) = d(b,Q) - d(a,Q)$. (note that we cannot directly compare $d(a,Q), d(b,Q)$ to determine if $a$ equals or precedes $b$ since there may be zero-weight edges in $Q$. If $i(a,Q) > i(b,Q)$ then we have $\delta_Q(a,b) = \infty$. If $C(u,Q), C(Q,w)$ are sets of connections from u to Q and from Q to w, we define $dist(C(u,Q),C(Q,w))=min_{(u,a) \in C(v,Q), (b,w) \in C(Q,w)} dist((u,a),(b,w))$.
 
+If there are no connections from $u$ or to $w$ then we set $dist(C(u,Q),C(Q,w))=\infty$, so we always have $\delta(u,w) \leq dist(C(u,Q),C(Q,w))$.
+
+**Lemma 3.5.** Suppose the shortest dipath from $u$ to $w$ is of length at most $\alpha$ and intersects $Q$. If $C(u,Q), C(Q,w)$ are $\epsilon$-covering, then $dist(C(u,Q),C(Q,w)) \leq \delta(u,w) + 2 \epsilon \alpha$.
+
+*Proof.* Let $x$ be a vertex where the shortest dipath from $u$ to $w$ intersects $Q$. Since $\delta(u,x) \leq \alpha$ there is a connection $(u,a) \in C(u,Q)$ such that $l(v,a)+\delta_Q(a,x) \leq \delta(u,x)+\epsilon \alpha$. Symmetrically, we also have $(b,w) \in C(Q,w)$ such that $l(b,w)+\delta_Q(x,b) \leq \delta(x,w) + \epsilon \alpha$. Combining these inequalities with $dist(C(u,Q),C(Q,w)) \leq l(v,a)+\delta_Q(a,x)+l(b,w)+\delta_Q(x,b) \leq \delta(u,x) + \delta(x,w) + 2\epsilon \alpha = \delta(u,w) + 2\epsilon \alpha$.
+
+We say $C(v,Q)$ is clean if there are no two distinct connections $(v,a), (v,b)$ such that $l(v,a) + \delta_Q(a,b) \leq l(v,b)$. Let $C(v,Q)$ be ordered if the connections are ordered according the the vertex-ordering in $Q$. Then $C(v,Q)$ is clean and ordered.
+
+**Lemma 3.6.** If C(u,Q) and C(Q,w) are clean and ordered then we can determine $dist(C(u,Q),C(Q,w))$ in $O(|C(u,Q)|+|C(Q,w)|)$ time.
+
+*Proof. *Finding the distance is just merging the two sets with ties resolved in favour of $C(u,Q)$, i.e. if $(u,c) \in C(u,Q), (c,w) \in C(Q,w)$ then we put $(u,c)$ ahead of $(c,w)$. We seek pairs $(u,a), (b,w)$ minimising the distance between them. Since $C(u,Q), C(Q,w)$ are clean we know that in this merged list the minimising distance vertices will be consecutive so we can find them in time linear to the size of both sets.
+
+**Lemma 3.7.** Given a shortest dipath $Q$ of length at most $\alpha$ we can find $O(1/\epsilon)$ connections for each vertex such that if there is a shortest path from $u$ to $w$ of length at most $\alpha$ that intersects $Q$ then we can compute the distance from $u$ to $w$ in $O(1/\epsilon)$ time with an additive error of $O(\epsilon \alpha)$.
+
+*Proof.* Combine Lemmas 3.4, 3.5, 3.6.
