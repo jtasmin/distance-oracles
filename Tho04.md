@@ -265,6 +265,6 @@ Given $(Q_0,H_0)$ we recur as follows: let $a$ be the first and $c$ be the last 
 Next let $Q_1$ be the part of $Q_0$ before $b$, and let $Q_2$ be the part after $b$. Let $U_1$ be the set of vertices $v$ with $l(a,v) > 2 \alpha$ or $(b,v)$ semi-$\epsilon$-covering (a,v). Then set $H_1=H_0 - U_1$ and $H_2 = H_0 - U_2$ and recur on $(Q_1,H_1), (Q_2,H_2)$.
 
 ### Correctness
-Now we prove correctness. We claim: for $v \in V(H_0)$  and $d \in \{ a,b,c \}, l(d,v)=\delta_{H^{*}_0}(d,v)$.
+Now we prove correctness. We claim: for $v \in V(H_0)$  and $d \in \{ a,b,c \}, l(d,v)=\delta_{H_0^{\star}}(d,v)$.
 
-*Proof.* From the construction of $H^{*}_0$ we immediately have $l(a,v) \geq \delta_{H^{*}_0}(a,v)$ and $l(c,v) \geq \delta_{H^{*}_0} (c,v)$. Also the new connections from $b$ satisfy this claim so it remains to prove that $l(a,v) \leq \delta_{H^{*}_0}(a,v)$ and $l(c,v) \leq \delta_{H^{*}_0}(a,v) and $l(c,v) \leq \delta_{H^{*}_0}(c,v)$. This is true in the first recursive call, and it follows inductively for the subproblems because $H^{*}_1$, $H^{*}_2$ must give distances longer than $H^{*}_0$.
+*Proof.* From the construction of $H_0^{\star}$ we immediately have $l(a,v) \geq \delta_{H_0^{\star}}(a,v)$ and $l(c,v) \geq \delta_{H_0^{\star}} (c,v)$. Also the new connections from $b$ satisfy this claim so it remains to prove that $l(a,v) \leq \delta_{H_0^{\star}}(a,v)$ and $l(c,v) \leq \delta_{H_0^{\star}}(a,v) and $l(c,v) \leq \delta_{H_0^{\star}}(c,v)$. This is true in the first recursive call, and it follows inductively for the subproblems because $H_1^{\star}$, $H_2^{\star}$ must give distances longer than $H_0^{\star}$.
