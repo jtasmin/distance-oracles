@@ -192,7 +192,7 @@ If $a$ equals or precedes $b$ in $Q$, $v$ is a vertex then we say a connection $
 Let $t$ be the last vertex in $Q$. When $(v,a)$ is the last connection added, consider the quantity $l(v,a) + \delta (a,t)$. When adding first connection, the quantity is $l(v,a_0)+\delta(a_0,t) \leq 2\alpha$. When we add $(v,b)$ to C(v,Q) we decrease this quantity by $(l(v,a)+\delta(a,t))-(l(v,b)+\delta(b,t)) = l(v,a)+\delta(a,b)-\delta(v,b) > \epsilon \alpha$. Since this quantity cannot be negative we can bound the number of connections added by $\lceil 2/\epsilon \rceil$.
 
 ### Approximate Distances via Q
-Connections from $Q$ to $v$ are defined symmetric to the connections from $v$ to $Q$. If $(b,v)$ is a connection and $a$ precedes $b$ in $Q$ then $(b,v)$ $\epsilon$-covers $(a,v) if $\delta(a,b)+l(b,v) \leq \delta(a,v)+\epsilon \alpha$. 
+Connections from $Q$ to $v$ are defined symmetric to the connections from $v$ to $Q$. If $(b,v)$ is a connection and $a$ precedes $b$ in $Q$ then $(b,v) \epsilon$-covers $(a,v)$ if $\delta(a,b)+l(b,v) \leq \delta(a,v)+\epsilon \alpha$. 
 
 If $(u,a),(b,w)$ are connections from $u$ to $Q$ and from $Q$ to $q$ we define $dist((u,a),(b,w)) = l(u,a)+ \delta_Q(a,b) + l(b,w)$.
 
