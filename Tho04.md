@@ -268,3 +268,8 @@ Next let $Q_1$ be the part of $Q_0$ before $b$, and let $Q_2$ be the part after 
 Now we prove correctness. We claim: for $v \in V(H_0)$  and $d \in \{ a,b,c \}, l(d,v)=\delta_{H_0^{\star}}(d,v)$.
 
 *Proof.* From the construction of $H_0^{\star}$ we immediately have $l(a,v) \geq \delta_{H_0^{\star}}(a,v)$ and $l(c,v) \geq \delta_{H_0^{\star}} (c,v)$. Also the new connections from $b$ satisfy this claim so it remains to prove that $l(a,v) \leq \delta_{H_0^{\star}}(a,v)$ and $l(c,v) \leq \delta_{H_0^{\star}}(a,v) and $l(c,v) \leq \delta_{H_0^{\star}}(c,v)$. This is true in the first recursive call, and it follows inductively for the subproblems because $H_1^{\star}$, $H_2^{\star}$ must give distances longer than $H_0^{\star}$.
+
+(see iPad notes for proof of correctness)
+
+### Number of Connections
+We want to show that the number of connections to each vertex in $H$ is $O((log|V(Q)|)/\epsilon)$
