@@ -189,7 +189,7 @@ If $a$ equals or precedes $b$ in $Q$, $v$ is a vertex then we say a connection $
 
 *Proof.* Take the first vertex in $Q$ within distance $\alpha$ from $v$, call it $a_0$. Make $(v,a_0)$ the first connection in $C(v,Q)$. Now scan remainining vertices $b$ in $Q$, adding connections only if some $(v,a)$ is the last connection and $(v,b)$ is not $\epsilon$-covered by $(v,a)$, i.e. add $b$ if $l(v,a) + \delta(a,b) > \delta(v,b) + \epsilon \alpha$.
 
-Let $t$ be the last vertex in $Q$. When $(v,a)$ is the last connection added, consider the quantity $l(v,a) + \delta (a,t)$. When adding first connection, the quantity is $l(v,a_0)+\delta(a_0,t) \leq 2\alpha$. When we add $(v,b)$ to C(v,Q) we decrease this quantity by $(l(v,a)+\delta(a,t))-(l(v,b)+\delta(b,t)) = l(v,a)+\delta(a,b)-\delta(v,b) > \epsilon \alpha$. Since this quantity cannot be negative we can bound the number of connections added by $\lceil 2/\epsilon \rceil$. `` revisit
+Let $t$ be the last vertex in $Q$. When $(v,a)$ is the last connection added, consider the quantity $l(v,a) + \delta (a,t)$. When adding first connection, the quantity is $l(v,a_0)+\delta(a_0,t) \leq 2\alpha$. When we add $(v,b)$ to C(v,Q) we decrease this quantity by $(l(v,a)+\delta(a,t))-(l(v,b)+\delta(b,t)) = l(v,a)+\delta(a,b)-\delta(v,b) > \epsilon \alpha$. Since this quantity cannot be negative we can bound the number of connections added by $\lceil 2/\epsilon \rceil$.
 
 ### Approximate Distances via Q
 Connections from $Q$ to $v$ are defined symmetric to the connections from $v$ to $Q$. If $(b,v)$ is a connection and $a$ precedes $b$ in $Q$ then $(b,v)$ $\epsilon$-covers $(a,v) if $\delta(a,b)+l(b,v) \leq \delta(a,v)+\epsilon \alpha$. 
@@ -213,3 +213,58 @@ We say $C(v,Q)$ is clean if there are no two distinct connections $(v,a), (v,b)$
 **Lemma 3.7.** Given a shortest dipath $Q$ of length at most $\alpha$ we can find $O(1/\epsilon)$ connections for each vertex such that if there is a shortest path from $u$ to $w$ of length at most $\alpha$ that intersects $Q$ then we can compute the distance from $u$ to $w$ in $O(1/\epsilon)$ time with an additive error of $O(\epsilon \alpha)$.
 
 *Proof.* Combine Lemmas 3.4, 3.5, 3.6.
+
+## Existence of Approximae Distance Oracles
+To construct a scale-$(\alpha,O(\epsilon))$ distance oracle that approximates distances below $\alpha$ with additive error $O(\epsilon \alpha)$ we apply Lemma 3.7 to each dipath in the reachability construction and replace the previous reachability connections with new approximation connections.
+
+Specifically, we run the recursion on each $(3, \alpha)$-layered graph $G_i^{\alpha}$ with framed separators as Section 2.5 details them. In each recursive call we have a subgraph $H$ of $G_i^{\alpha}$, a frame F, and a separator $S$ such that if $u,w$ are in different components of $H-S$ then any path from $u$ to $w$ in $G_i^{\alpha}$ intersects $F \cup S$. Because $F \cup S$ contains a constant number of root paths in the $(3, \alpha)$-layered spanning tree $T_i^{\alpha}$ and hence has a constant number of dipaths with length at most $\alpha$. 
+
+We apply Lemma 3.7 to each dipaths, using $O(1/\epsilon)$ connections per vertex. We approximate the distance from $u$ to $w$ in $O(1/\epsilon)$ time with additive error of $O(\epsilon \alpha)$. Relative to the previous reachability construction, both space and query time blows up with a factor of $O(1/\epsilon)$.
+
+**Lemma 3.8** We can construct a $O(n (log n)/\epsilon)$ space scale-$(\alpha, \epsilon)$ distance oracle approximating distances in $O(1/\epsilon)$ time.
+
+Now we construct a stretch-$(1+\epsilon)$ distance oracle for $i = 1,...,\lceil \log_2{nN} \rceil,\alpha = 2^i$, and $\epsilon' \in \{1/2, \epsilon/4 \}$. First construct a scale-$(\alpha,\epsilon')$ distance oracle as above with $\epsilon' = 1/2$ with constant query time to approximate distances within a constant factor quickly. 
+
+To approximate the $u$ to $w$ distance we binary search over the $\lceil \log_2{nN} \rceil$ values of $i$, looking for a value of $\alpha = 2^i$ such that $\alpha/4 = 2^{i-2} < \hat{\delta}^{(\alpha, 1/2)}(u,w) < \alpha = 2^i$, where the $\hat{\delta}^{(\alpha, \epsilon/4)}$ denotes the distance estimate by the scale-$(\alpha,\epsilon/4)$ distance oracle. This condition is always satisfied for $i = \rfloor \log_2{\delta(u,w)} \lfloor -1$ and sometimes also for $i = \rfloor \log_2{\delta(u,w)} \lfloor$. With this value of $\alpha$ we see that the estimate distance $\hat{\delta}^{(\alpha,\epsilon/4)}(u,w)$ will give us $\hat{\delta}^{(\alpha,\epsilon/4)}(u,w)/\delta(u,w) = 1+(\epsilon \alpha/4)/(\alpha/4) = 1+\epsilon$ with total query time $O(\log{\log{nN}}+1/\epsilon).
+
+**Lemma 3.9.** We can construct a stretch-$(1+\epsilon)$ distance oracle using $O(\log{nN})$ scale-$(\alpha,\epsilon')$ distance oracles with $\alpha=2^i, i=0,...,\rceil \log_2{nN} \lceil, \epsilon' \in \{ 1/2, \epsilon/4 \}$. If a scale-$(\alpha,\epsilon')$ distance oracle approximates distances in time $t(\epsilon')$ independent of $\alpha$ then the stretch-$(1+\epsilon)$ distance oracle approximates distances in time $O(t(1/2)/\epsilon + t(\epsilon/4) \log \log{nN}). If the scale-$(\alpha,\epsilon')$ distance oracles are distributed on labels then the stretch-$(1+\epsilon)$ combines the labels for each vertex.
+
+Combining the above two lemmas we get:
+
+**Lemma 3.10.** We construct a stretch-(1+\epsilon)$ oracle using $O(n(\log{nN})(log n)/\epsilon)$ space which approximates distances in $O(log \log{nN} + 1/\epsilon)$ time, with the oracle distributed as a labeling scheme with labels of size $O((\log{nN})(log n)/\epsilon)$.
+
+For an efficient construction of the oracle in Lemma 3.10 we need an efficient construction of covering connections (an analogy of Lemma 3.4).
+
+## Construction Approximation Connections via a Dipath Efficiently
+Given a digraph $H$ containing a shortest dipath $Q$ from $s$ to $t$ whose length is at most $\alpha$, we want to efficiently construct these $\epsilon$-covering sets of connections between $Q$ and each vertex in $H$.
+
+We will focus on connections from $Q$ to vertices $v$ in $H$ with the implicit understanding of the symmetric connections from $v$ to $Q$. We will first construct $\epsilon$-covering sets of size $O((\log{n})/\epsilon)$ but will reduce the size using the following lemma.
+
+**Lemma 3.11.** Given an ordered $\epsilon_0$-covering set $D(Q,v)$ of connections from $Q$ to $v$ we can construct a clean ordered $(\epsilon_0+\epsilon_1)$-covering set $C(Q,v) \subseteq D(Q,v)$ of size at most $1+(2+\epsilon_0)/\epsilon_1=O(1/\epsilon_1)$ in $O(|D(Q,v)|)$ time.
+
+*Proof.* Generalisation of Lemma 3.4. First we delete any edge $(a,v) \in D(Q,v)$ with $l(a,v)> \alpha + \epsilon_0 \alpha$. With this done, we visit the connections of $D(q,v)$ in backwards order: the first connection $(c,v)$ always included in $C(Q,v)$. For any later connection $(a,v)$, let $(b,v)$ be the last connection added to $C(Q,v)$, then we only add $(a,v)$ if $\delta(a,b) + l(b,v) > l(a,v) + \epsilon \alpha$. To see that $C(Q,v)$ is $(\epsilon_0+\epsilon_1)-covering, consider any $a \in Q$ and let $b$ be a successor of $a$ in $Q$ such that $(b,v) \in D(Q,v)$ and $f(b)=\delta(a,b)+l(b,v)$ is minimised. 
+
+Since $D(Q,v)$ is $\epsilon_0$-covering, $f(b) \leq \delta(a,v) + \epsilon_0 \alpha$. However, $(b,v)$ is excluded from $C(Q,v)$ if there is a $(c,v) \in C(Q,v)$ such that $\delta(b,c) + l(c,v) \leq l(b,v) + \epsilon_1 \alpha$. Then we know $\delta(a,c) + l(c,v) \leq \delta(a,b)+l(b,v)+\epsilon_1 \alpha = f(b) + \epsilon_1 \alpha \leq \delta(a,v)+(\epsilon_0+\epsilon_1)\alpha$.
+
+To see that the size of $C(Q,v)$ is small, observe that when adding $(a,v)$ to $C(Q,v)$ we decrease the distance to $v$ from the first point $s$ in $Q$ by $> \epsilon_1 \alpha$. When $(b,v)$ is added more precisely, the decrease is by $(\delta(s,b)+l(b,v))-(\delta(s,a)+l(a,v))=\delta(a,b)+l(b,v)-l(a,v) > \epsilon_1 \alpha$. When the first connection $(c,v)$ was added this distance was at most $\delta(s,c) + l(c,v) \leq 2 \alpha + \epsilon_0 \alpha$, hence we can add at most $(2+\epsilon_0)/\epsilon_1$ additional connections.
+
+Now we present an efficient way of constructing $\epsilon$-covering sets of size $O((\log{n})/\epsilon). To state the result formally let $sssp(Q,H)$ be the smallest number such that if $H_0$ is a subgraph of $H$, $Q_0$ is the reduction of $Q$ to vertices from $H_0$, and $b$ is any vertex in $Q_0$.
+
+Then we compute the single-source shortest dipaths from $b$ in $H_0 \cup Q_0$ in $O(sssp(Q,H)|E(H_0)|)$ time. With a classic heap we know $sssp(Q,H) = O(log|V(H)|). If $H \cup Q$ is planar then $sssp(Q,H) = O(1)$, but this is not always true for our uses.
+
+**Lemma 3.12.** Given a graph $H$ with shortest dipath $Q$, for each $v \in V(H)$ we can construct an ordered $\epsilon$-covering set $C(Q,v)$ of size $O((log|V(Q)|)/\epsilon)$ in $O(sssp(Q,H)|E(H)|(log|V(Q)|)/\epsilon)$ time.
+
+To construct, we say that $(b,v) semi-$\epsilon$ covers $(a,v)$ if $a$ equals or precedes $b$ in $Q$ and $\delta(a,b)+l(b,v) \leq l(a,v)+\epsilon \alpha$. If $l(a,v)=\delta(a,v)$ then this is the same as $\epsilon$-covering but $l(b,v)$ may be larger than $\delta(b,v)$ — observe that semi-$\epsilon$-covering can be tested in constant time.
+
+We use a recursion by taking $(Q_0,H_0)$ where $Q_0$ is a segment of $Q$ and $H_0$ is an induced subgraph of $H$ (contains all edges from $H$ between vertices in $H_0$). This recursion step will make some connections between interior vertices in $Q_0$ to vertices in $H_0$ (this recursion assumes that we always have a connection from an endpoint of $Q_0$ to all vertices in $H_0$. Although some of these endpoints may be infinite, they are still included.
+
+To start we make a single source shortest path computation for each of the endpoints of $Q$, $s$ and $t$ and then for each $v \in V(H)$ we connect $s$ to $v$ with $l(s,v)=\delta(s,v)$ and $t$ to $v$ with $l(t,v)=\delta(t,v)$. Now we can recur on $(Q,H)$.
+
+Given $(Q_0,H_0)$ we recur as follows: let $a$ be the first and $c$ be the last point in $Q_0$. Let $H_0^*$ be the digraph consisting of $H_0, Q_0,$ and all connections from endpoints $a,c$ to vertices in $H_0$, and let $b$ be a vertex in the middle of $Q_0$ (if $Q_0$ has q vertices, then b is the $\rceil q/2 \lceil$ vertex in $Q_0$. After a single source shortest dipath computation from $b \in H_0^*$, for each $v \in V(H_0)$, we connect $b$ to $v$ with $l(b,v)=\delta_{H^*_0}(b,v).
+
+Next let $Q_1$ be the part of $Q_0$ before $b$, and let $Q_2$ be the part after $b$. Let $U_1$ be the set of vertices $v$ with $l(a,v) > 2 \alpha$ or $(b,v)$ semi-$\epsilon$-covering (a,v). Then set $H_1=H_0 - U_1$ and $H_2 = H_0 - U_2$ and recur on $(Q_1,H_1), (Q_2,H_2)$.
+
+### Correctness
+Now we prove correctness. We claim: for $v \in V(H_0)$  and $d \in \{ a,b,c \}, l(d,v)=\delta_{H^*_0}(d,v)$.
+
+*Proof.* From the construction of $H_0^*$ we immediately have $l(a,v) \geq \delta_{H_0^*}(a,v)$ and $l(c,v) \geq \delta_{H^*_0} (c,v)$. Also the new connections from $b$ satisfy this claim so it remains to prove that $l(a,v) \leq \delta_{H^*_0}(a,v)$ and $l(c,v) \leq \delta_{H^*_0}(a,v) and $l(c,v) \leq \delta_{H^*_0}(c,v)$. This is true in the first recursive call, and it follows inductively for the subproblems because $H_1^*, H_2^*$ must give distances longer than $H_0^*$.
