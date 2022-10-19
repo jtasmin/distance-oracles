@@ -260,11 +260,11 @@ We use a recursion by taking $(Q_0,H_0)$ where $Q_0$ is a segment of $Q$ and $H_
 
 To start we make a single source shortest path computation for each of the endpoints of $Q$, $s$ and $t$ and then for each $v \in V(H)$ we connect $s$ to $v$ with $l(s,v)=\delta(s,v)$ and $t$ to $v$ with $l(t,v)=\delta(t,v)$. Now we can recur on $(Q,H)$.
 
-Given $(Q_0,H_0)$ we recur as follows: let $a$ be the first and $c$ be the last point in $Q_0$. Let $H_0^*$ be the digraph consisting of $H_0, Q_0,$ and all connections from endpoints $a,c$ to vertices in $H_0$, and let $b$ be a vertex in the middle of $Q_0$ (if $Q_0$ has q vertices, then b is the $\rceil q/2 \lceil$ vertex in $Q_0$. After a single source shortest dipath computation from $b \in H_0^*$, for each $v \in V(H_0)$, we connect $b$ to $v$ with $l(b,v)=\delta_{H^*_0}(b,v).
+Given $(Q_0,H_0)$ we recur as follows: let $a$ be the first and $c$ be the last point in $Q_0$. Let $H*_0$ be the digraph consisting of $H_0, Q_0,$ and all connections from endpoints $a,c$ to vertices in $H_0$, and let $b$ be a vertex in the middle of $Q_0$ (if $Q_0$ has q vertices, then b is the $\rceil q/2 \lceil$ vertex in $Q_0$. After a single source shortest dipath computation from $b \in H*_0$, for each $v \in V(H_0)$, we connect $b$ to $v$ with $l(b,v)=\delta_{H*_0}(b,v).
 
 Next let $Q_1$ be the part of $Q_0$ before $b$, and let $Q_2$ be the part after $b$. Let $U_1$ be the set of vertices $v$ with $l(a,v) > 2 \alpha$ or $(b,v)$ semi-$\epsilon$-covering (a,v). Then set $H_1=H_0 - U_1$ and $H_2 = H_0 - U_2$ and recur on $(Q_1,H_1), (Q_2,H_2)$.
 
 ### Correctness
-Now we prove correctness. We claim: for $v \in V(H_0)$  and $d \in \{ a,b,c \}, l(d,v)=\delta_{H^*_0}(d,v)$.
+Now we prove correctness. We claim: for $v \in V(H_0)$  and $d \in \{ a,b,c \}, l(d,v)=\delta_{H^{*}_0}(d,v)$.
 
-*Proof.* From the construction of $H^*_0$ we immediately have $l(a,v) \geq \delta_{H^*_0}(a,v)$ and $l(c,v) \geq \delta_{H^*_0} (c,v)$. Also the new connections from $b$ satisfy this claim so it remains to prove that $l(a,v) \leq \delta_{H^*_0}(a,v)$ and $l(c,v) \leq \delta_{H^*_0}(a,v) and $l(c,v) \leq \delta_{H^*_0}(c,v)$. This is true in the first recursive call, and it follows inductively for the subproblems because $H_1^*, H_2^*$ must give distances longer than $H_0^*$.
+*Proof.* From the construction of $H^{*}_0$ we immediately have $l(a,v) \geq \delta_{H^{*}_0}(a,v)$ and $l(c,v) \geq \delta_{H^{*}_0} (c,v)$. Also the new connections from $b$ satisfy this claim so it remains to prove that $l(a,v) \leq \delta_{H^{*}_0}(a,v)$ and $l(c,v) \leq \delta_{H^{*}_0}(a,v) and $l(c,v) \leq \delta_{H^{*}_0}(c,v)$. This is true in the first recursive call, and it follows inductively for the subproblems because $H^{*}_1, H^{*}_2$ must give distances longer than $H^{*}_0$.
